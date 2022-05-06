@@ -1,0 +1,19 @@
+.country {
+  background: #88dea8;
+  border-radius: .5em;
+  padding: 1em;
+}
+
+.country:not(:last-child) {
+  margin-bottom: .5em;
+}
+
+.name {
+  font-weight: 500;
+  font-size: 1.2em;
+}
+
+.area {
+  font-size: .8em;
+  font-style: italic;
+}
