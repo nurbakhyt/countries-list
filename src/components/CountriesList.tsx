@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { CountryItem } from '../components';
+import { CountryItem, Select } from '../components';
 import useCountries from '../hooks/useCountries';
 
 import styles from './CountriesList.module.css';
@@ -25,20 +25,14 @@ const CountriesList: React.FC = () => {
   return (
     <>
       <div className={styles.toolbar}>
-        <label className={styles.sorting}>
-          Sort by name&nbsp;
-          <select value={sortingType} onChange={handleSorting}>
-            <option value="asc">From A-Z</option>
-            <option value="desc">From Z-A</option>
-          </select>
-        </label>
+        <Select label="Sort by name" value={sortingType} onChange={handleSorting}>
+          <option value="asc">From A-Z</option>
+          <option value="desc">From Z-A</option>
+        </Select>
 
-        <label className={styles.byArea}>
-          Smaller than&nbsp;
-          <select className={styles.byAreaSelect} value={smallerThan} onChange={handleByArea}>
-            {allCountries.map((name: string) => <option key={name} value={name}>{name}</option>)}
-          </select>
-        </label>
+        <Select label="Smaller than" value={smallerThan} onChange={handleByArea}>
+          {allCountries.map((name: string) => <option key={name} value={name}>{name}</option>)}
+        </Select>
       </div>
 
       <main>

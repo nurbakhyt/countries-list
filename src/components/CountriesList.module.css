@@ -1,18 +1,3 @@
 .toolbar {
-  margin-bottom: 1em;
   font-size: .9em;
-}
-
-.sorting {
-  margin-right: 1em;
-  margin-bottom: 1em;
-}
-
-.byArea {
-  margin-right: 1em;
-  margin-bottom: 1em;
-}
-
-.byAreaSelect {
-  width: 120px;
 }
