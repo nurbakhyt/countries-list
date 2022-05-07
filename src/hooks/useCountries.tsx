@@ -10,13 +10,34 @@ const arrToMap = (items: Country[]) => items.reduce((m: CountriesMap, item: Coun
 type UseCountriesParams = {
   sortingType: SortingType;
   smallerThan: string;
+  region: string;
 };
 
-const useCountries = ({ sortingType, smallerThan }: UseCountriesParams) => {
+const useCountries = ({ sortingType, smallerThan, region }: UseCountriesParams) => {
   const [isLoading, setLoading] = useState(false);
   const [countriesByName, setCountriesByName] = useState<CountriesMap>({});
 
   const allCountries = useMemo(() => Object.keys(countriesByName), [countriesByName]);
+
+  const countriesByRegion = useMemo(() =>
+    allCountries.reduce((o: ByRegionMap, name: string) => {
+      const { region } = countriesByName[name];
+
+      if (region in o) {
+        return {
+          ...o,
+          [region]: [
+            ...o[region],
+            name,
+          ]
+        }
+      }
+
+      return {
+        ...o,
+        [region]: [name],
+      }
+    }, {}), [countriesByName, allCountries]);
 
   const list = useMemo(
     () => {
@@ -32,9 +53,20 @@ const useCountries = ({ sortingType, smallerThan }: UseCountriesParams) => {
         all = all.filter((name: string) => area > countriesByName[name].area);
       }
 
+      if (region.length > 0 && region in countriesByRegion) {
+        all = all.filter((name: string) => countriesByName[name].region === region);
+      }
+
       return all;
     },
-    [allCountries, countriesByName, sortingType, smallerThan]
+    [
+      allCountries,
+      countriesByName,
+      sortingType,
+      smallerThan,
+      countriesByRegion,
+      region
+    ]
   );
 
   useEffect(() => {
@@ -54,6 +86,7 @@ const useCountries = ({ sortingType, smallerThan }: UseCountriesParams) => {
     allCountries,
     list,
     countriesByName,
+    countriesByRegion,
   };
 }
 
