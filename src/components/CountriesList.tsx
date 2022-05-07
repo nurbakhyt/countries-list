@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { CountryItem, Select } from '../components';
+import { CountryItem, Select, Pagination } from '../components';
 import useCountries from '../hooks/useCountries';
+import usePagination from '../hooks/usePagination';
 
 import styles from './CountriesList.module.css';
 
@@ -13,6 +14,13 @@ const CountriesList: React.FC = () => {
     smallerThan,
     region,
   });
+  const {
+    current,
+    perPage,
+    total,
+    goToPage,
+    paginatedList,
+  } = usePagination(list);
 
   if (isLoading) return <p>Loading...</p>;
 
@@ -50,8 +58,8 @@ const CountriesList: React.FC = () => {
       </div>
 
       <main>
-        {list.length < 1 && <p>Список пуст</p>}
-        {list.map((name: string) => (
+        {paginatedList.length < 1 && <p>Список пуст</p>}
+        {paginatedList.map((name: string) => (
           <CountryItem
             key={name}
             name={countriesByName[name].name}
@@ -60,6 +68,10 @@ const CountriesList: React.FC = () => {
           />
         ))}
       </main>
+
+      <footer>
+        <Pagination total={total} current={current} perPage={perPage} goToPage={goToPage}/>
+      </footer>
     </>
   );
 }

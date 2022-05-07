@@ -1,0 +1,24 @@
+.container {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+}
+
+.item {
+  border-bottom: 1px solid transparent;
+  cursor: pointer;
+  padding: 0 .5em;
+  line-height: 2em;
+}
+
+.item:focus,
+.item:hover {
+  border-bottom-color: #88dea8;
+}
+
+.active {
+  cursor: not-allowed;
+  border-color: #1a5f34;
+}
