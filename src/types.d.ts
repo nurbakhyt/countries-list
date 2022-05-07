@@ -4,3 +4,5 @@ type Country = {
   region: string;
 };
 
+type SortingType = 'asc' | 'desc';
+

@@ -7,11 +7,21 @@ const arrToMap = (items: Country[]) => items.reduce((m, item) => ({
   [item.name]: item,
 }), {});
 
-const useCountries = () => {
+type UseCountriesParams = {
+  sortingType: SortingType;
+};
+
+const useCountries = ({ sortingType }: UseCountriesParams) => {
   const [isLoading, setLoading] = useState(false);
   const [countriesByName, setCountriesByName] = useState<{ [prop: string]: Country }>({});
 
-  const list = useMemo(() => Object.keys(countriesByName), [countriesByName]);
+  const list = useMemo(
+    () =>
+    sortingType === 'asc'
+      ? Object.keys(countriesByName)
+      : Object.keys(countriesByName).sort((a, b) => a > b  ? -1 : 1),
+    [countriesByName, sortingType]
+  );
 
   useEffect(() => {
     setLoading(true);
