@@ -4,5 +4,9 @@ type Country = {
   region: string;
 };
 
+type CountriesMap = {
+  [prop: string]: Country;
+};
+
 type SortingType = 'asc' | 'desc';
 

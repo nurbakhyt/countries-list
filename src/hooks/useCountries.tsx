@@ -2,25 +2,39 @@ import { useEffect, useMemo, useState } from 'react';
 
 const API_URL = 'https://restcountries.com/v2/all?fields=name,region,area';
 
-const arrToMap = (items: Country[]) => items.reduce((m, item) => ({
+const arrToMap = (items: Country[]) => items.reduce((m: CountriesMap, item: Country) => ({
   ...m,
   [item.name]: item,
 }), {});
 
 type UseCountriesParams = {
   sortingType: SortingType;
+  smallerThan: string;
 };
 
-const useCountries = ({ sortingType }: UseCountriesParams) => {
+const useCountries = ({ sortingType, smallerThan }: UseCountriesParams) => {
   const [isLoading, setLoading] = useState(false);
-  const [countriesByName, setCountriesByName] = useState<{ [prop: string]: Country }>({});
+  const [countriesByName, setCountriesByName] = useState<CountriesMap>({});
+
+  const allCountries = useMemo(() => Object.keys(countriesByName), [countriesByName]);
 
   const list = useMemo(
-    () =>
-    sortingType === 'asc'
-      ? Object.keys(countriesByName)
-      : Object.keys(countriesByName).sort((a, b) => a > b  ? -1 : 1),
-    [countriesByName, sortingType]
+    () => {
+      let all = [...allCountries];
+      if (sortingType === 'desc') {
+        all.sort((a, b) => a > b ? -1 : 1);
+      } else if (sortingType === 'asc') {
+        all.sort();
+      }
+
+      if (smallerThan.length > 0) {
+        const { area = 0 } = countriesByName[smallerThan];
+        all = all.filter((name: string) => area > countriesByName[name].area);
+      }
+
+      return all;
+    },
+    [allCountries, countriesByName, sortingType, smallerThan]
   );
 
   useEffect(() => {
@@ -37,6 +51,7 @@ const useCountries = ({ sortingType }: UseCountriesParams) => {
 
   return {
     isLoading,
+    allCountries,
     list,
     countriesByName,
   };
